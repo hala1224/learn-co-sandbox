@@ -5,3 +5,5 @@ Staring Project (3/18/2019)
 3. Created repository on GITHUB
 4. Pushed all the changes to master branch
 5. Created config folder with environment file
+Teachers have classes which have students 
+Students have classes which has a teacher
