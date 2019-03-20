@@ -5,5 +5,18 @@ Staring Project (3/18/2019)
 3. Created repository on GITHUB
 4. Pushed all the changes to master branch
 5. Created config folder with environment file
-Teachers have classes which have students 
-Students have classes which has a teacher
+Teachers have classes
+Classes belons to  a teacher
+
+
+3/21/2019 To do list
+Create routes for 
+-Teacher  Login
+          Edit
+          Delete
+          Find by Id
+          
+Create Views for all of the above
+
+Create Data Base
+
