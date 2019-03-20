@@ -29,7 +29,7 @@ class ApplicationController < Sinatra::Base
 
   get "/" do
     if logged_in?
-      redirect '/tweets'
+      redirect '/classes'
     else
       erb :index
     end
@@ -37,18 +37,18 @@ class ApplicationController < Sinatra::Base
 
   get "/login" do
     if logged_in?
-      redirect '/tweets'
+      redirect '/classes'
     else
-      erb :"/users/login"
+      erb :"/teachers/login"
     end
   end
 
   get "/signup" do
     if logged_in?
       flash[:notice] = "You're already logged in! Redirecting..."
-      redirect '/tweets'
+      redirect '/classess'
     else
-      erb :"/users/create_user"
+      erb :"/teachers/create_teacher"
     end
   end
 
@@ -57,21 +57,21 @@ class ApplicationController < Sinatra::Base
       flash[:error] = "You have missing required fields."
       redirect '/signup'
     else
-      @user = User.new(params)
-      @user.save
-      session[:user_id] = @user.id
-      flash[:notice] = "Welcome to Fwitter!"
-      redirect '/tweets'
+      @teacher = Teacher.new(params)
+      @teacher.save
+      session[:teacher_id] = @teacher.id
+      flash[:notice] = "Welcome to Community Gym"
+      redirect '/classes'
     end
   end
 
 
   post "/login" do
-    @user = User.find_by(:username => params[:username])
-    if @user && @user.authenticate(params[:password])
-      session[:user_id] = @user.id
-      flash[:success] = "Welcome, #{@user.username}!"
-      redirect '/tweets'
+    @teacher = Teacher.find_by(:username => params[:username])
+    if @teacher && @teacher.authenticate(params[:password])
+      session[:teacher_id] = @teacher.id
+      flash[:success] = "Welcome, #{@teacher.username}!"
+      redirect '/classes'
     else
       flash[:error] = "Login failed!"
       redirect '/login'
@@ -79,15 +79,16 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/users/:slug' do
-    @user = User.find_by_slug(params[:slug])
-    @tweets = @user.tweets
-    erb :"/users/show"
+    @teacher = Teacher.find_by_slug(params[:slug])
+    @classes = @teacher.classes
+    erb :"/teachers/show"
   end
+# replace user with teacher and tweets with classes
 
-  get "/tweets/new" do
-    @user = current_user
+  get "/classes/new" do
+    @teacher = current_teacher
     if logged_in?
-      erb :"/tweets/create_tweet"
+      erb :"/classes/create_class"
     else
       redirect '/login'
     end
@@ -95,44 +96,44 @@ class ApplicationController < Sinatra::Base
 
   post "/new" do
     if logged_in? && params[:content] != ""
-      @user = current_user
-      @tweet = Tweet.create(content: params["content"], user_id: params[:user_id])
-      @tweet.save
-      erb :"/tweets/show_tweet"
+      @teacher = current_teacher
+      @class = Class.create(content: params["content"], teacher_id: params[:teacher_id])
+      @class.save
+      erb :"/classes/show_class"
     elsif logged_in? && params[:content] == ""
-      flash[:notice] = "Your tweet is blank!"
-      redirect '/tweets/new'
+      flash[:notice] = "Your class is blank!"
+      redirect '/classes/new'
     else
       flash[:notice] = "Please log in to proceed"
       redirect '/login'
     end
   end
 
-  get "/tweets" do
+  get "/classes" do
     if logged_in?
-      @user = current_user
-      erb :"/tweets/tweets"
+      @teacher = current_teacher
+      erb :"/classes/classes"
     else
       redirect '/login'
     end
   end
 
-  get "/tweets/:id" do
-    @user = current_user
-    @tweet = Tweet.find_by_id(params[:id])
+  get "/classes/:id" do
+    @teacher = current_teacher
+    @class = Class.find_by_id(params[:id])
     if !logged_in?
       redirect '/login'
     else
-      erb :"/tweets/show_tweet"
+      erb :"/classes/show_class"
     end
   end
 
-  get "/tweets/:id/edit" do
+  get "/classes/:id/edit" do
     if logged_in?
-      @tweet = Tweet.find(params[:id])
+      @class = Class.find(params[:id])
       if @tweet.user_id == session[:user_id]
         # binding.pry
-      erb :"/tweets/edit_tweet"
+      erb :"/classes/edit_class"
       else
         redirect '/login'
       end
