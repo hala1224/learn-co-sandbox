@@ -11,10 +11,11 @@ Classes belons to  a teacher
 
 3/21/2019 To do list
 Create routes for 
--Teacher  Login
+-Teacher  Login   
           Edit
           Delete
           Find by Id
+Done
           
 Create Views for all of the above
 
